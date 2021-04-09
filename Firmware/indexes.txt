@@ -1,0 +1,612 @@
+
+
+ -----------+---------+------+------------------------------------------------------------------------------------------------------------------------------------------
+   index    | i\u\f\a | směr |  popis 
+ -----------+---------+------+------------------------------------------------------------------------------------------------------------------------------------------
+   0        | u32     |  GET |  firmware PAIRCODE (identifikace typu SDS)
+   0        |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   1        | u32     |  GET |  počet přihlášených uživatelů do web admin
+   1        |         |  SET |  n/a
+ -----------+---------+------+--
+   2        | a       |  GET |  sysLocation (text, viz webadmin)
+   2        |         |  SET |  n/a
+ -----------+---------+------+--
+   3        | u32     |  GET |  uptime (increased by 1 each every 10msec) (example: 100 = 1 sec)
+   3        |         |  SET |  n/a
+ -----------+---------+------+--
+   4        | u32     |  GET |  LOCAL time (NTP UTC Epoch, with GMT-offset and DST-offset applied), value in seconds
+   4        |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   5        | u32     |  GET |  rozpad LOCAL času = den (1 až 31)
+   5        |         |  SET |  n/a
+ -----------+---------+------+--
+   6        | u32     |  GET |  rozpad LOCAL času = měsíc (1 až 12)
+   6        |         |  SET |  n/a
+ -----------+---------+------+--
+   7        | u32     |  GET |  rozpad LOCAL času = rok (plná hodnota)
+   7        |         |  SET |  n/a
+ -----------+---------+------+--
+   8        | u32     |  GET |  rozpad LOCAL času = hodina (0 až 23)
+   8        |         |  SET |  n/a
+ -----------+---------+------+--
+   9        | u32     |  GET |  rozpad LOCAL času = minuta (0 až 59)
+   9        |         |  SET |  n/a
+ -----------+---------+------+--
+   10       | u32     |  GET |  rozpad LOCAL času = sekunda (0 až 59)
+   10       |         |  SET |  n/a
+ -----------+---------+------+--
+   11       | u32     |  GET |  rozpad LOCAL času = číslo dne v týdnu = počet dní od Neděle (0 až 6)
+   11       |         |  SET |  n/a
+ -----------+---------+------+--
+   12       | u32     |  GET |  Device IP address
+   12       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   13..15   |         |  GET |  n/a (reserved)
+   13..15   |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   16       | u32     |  GET |  Gateway IP address
+   16       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   17..19   |         |  GET |  n/a (reserved)
+   17..19   |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   20       | u32     |  GET |  Network IP Mask
+   20       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   21..23   |         |  GET |  n/a (reserved)
+   21..23   |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   24       | u32     |  GET |  Ethernet Link Status
+   24       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   25       | u32     |  GET |  Ethernet Link Speed (0, 10 nebo 100)
+   25       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   26       | i32     |  GET |  NTP GMT offset (-11 .. 11) = hodinový offset mezi UTC a LOCAL
+   26       | i32     |  SET |  NTP GMT offset (pozor, nezapíše se do pevné paměti)
+ -----------+---------+------+--
+   27       | u32     |  GET |  platnost přidělené IP adresy (0 = SDS nemá přidělenou IP)
+   27       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   28       | u32     |  GET |  poslední okamžik kdy byla IP patřící SDS změněna
+   28       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   29       | u32     |  GET |  stav DHCP (0=vyp, nebo stavové hodnoty: 1..11)
+   29       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   30       | u32     |  GET |  aktualní hodnota DHCP lease time (secs)
+   30       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   31       | u32     |  GET |  MAC[0] (odpověď je vždy v dolních 8 bitech)
+   31       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   32       | u32     |  GET |  MAC[1]
+   32       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   33       | u32     |  GET |  MAC[2]
+   33       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   34       | u32     |  GET |  MAC[3]
+   34       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   35       | u32     |  GET |  MAC[4]
+   35       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   36       | u32     |  GET |  MAC[5]
+   36       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   37..39   | u32     |  GET |  unique serial number: dword [0], [1] and [2]
+   37..39   |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   40       | u32     |  GET |  SoC power-up or reset reason (LSB: 8 bits)
+   40       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   41       | a       |  GET |  OEM branding (login web page) [32 chars]
+   41       | a       |  SET |  OEM branding (login web page) [32 chars]
+ -----------+---------+------+--
+   42       | a       |  GET |  OEM branding (welcome web page) [128 chars]
+   42       | a       |  SET |  OEM branding (welcome web page) [128 chars]
+ -----------+---------+------+--
+   43       | u32     |  GET |  NTP-server IP address
+   43       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   44       | u32     |  GET |  stav NTP-client (0 = nesynchronizováno)
+   44       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   45       | u32     |  GET |  UpTime v jednotkách msec (uptime od startu zařízení)
+   45       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   46       | u32     |  GET |  teplota SoC jako RAW hodnota (nutno ručně přepočíst na degC)
+   46       | i32     |  GET |  teplota SoC přímo přepočtená na degC (už provedený kalibrovaný přepočet)
+   46       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   48..60   |         |  GET |  n/a (reserved)
+   48..60   |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   61       | u32     |  GET |  random number
+   61       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   62..63   |         |  GET |  n/a (reserved)
+   62..63   |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   64       | u32     |  GET |  stav sekundového odpočítavače (snižuje se o 1 každou 1sec, až na 0)
+   64       | u32     |  SET |  nastavení hodnoty sekundového odpočítávače
+ -----------+---------+------+--
+   65       | u32     |  GET |  stav automatiky DST času (0 = nepoužito, 1 = DST aplikováno, 2 = DST neaplikováno)
+   65       | u32     |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   66..84   |         |  GET |  n/a (reserved) 
+   66..84   |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   85       | u32     |  GET |  rozlišení typu modulu: BIG nebo STSW (0 = STSW or SMALL)(1 = BIG)
+   85       | u32     |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   86       | u32     |  GET |  generický stav běhu FULL-C programu (0, 1, 2, 4, 8, 16, 32, 64)
+   86       | u32     |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   87       |         |  GET |  n/a (reserved)
+   87       |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   88       |         |  GET |  n/a (reserved) 
+   88       |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   89       | u32     |  GET |  IP-WatchDog: stav (0 = vyp)
+   89       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   90       | u32     |  GET |  IP-WatchDog: poslední známé RTT (msecs)
+   90       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   91       | u32     |  GET |  IP-WatchDog: stav výstupu
+   91       |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   92..138  |         |  GET |  n/a (reserved)
+   92..138  |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   139      | u32     |  GET |  NTP true raw epoch-time (secs since Linux Epoch) (clear UTC with *no* GMT or DST offset applied)
+   139      |         |  SET |  n/a
+ -----------+---------+------+--
+   140      | u32     |  GET |  proměnná pro speciální TRAP (401)
+   140      | u32     |  SET |  proměnná pro speciální TRAP (401)
+ -----------+---------+------+--
+   141      | a       |  GET |  proměnná pro speciální TRAP (402) (max 32 znaků)
+   141      | a       |  SET |  proměnná pro speciální TRAP (402)
+ -----------+---------+------+--
+   142      | u32     |  GET |  proměnná pro speciální TRAP (403)
+   142      | u32     |  SET |  proměnná pro speciální TRAP (403)
+ -----------+---------+------+--
+   143      | u32     |  GET |  proměnná pro speciální TRAP (404)
+   143      | u32     |  SET |  proměnná pro speciální TRAP (404)
+ -----------+---------+------+--
+   144      | u32     |  GET |  proměnná pro speciální TRAP (405)
+   144      | u32     |  SET |  proměnná pro speciální TRAP (405)
+ -----------+---------+------+--
+   145      | u32     |  GET |  proměnná pro speciální TRAP (406)
+   145      | u32     |  SET |  proměnná pro speciální TRAP (406)
+ -----------+---------+------+--
+   146      | u32     |  GET |  proměnná pro speciální TRAP (407)
+   146      | u32     |  SET |  proměnná pro speciální TRAP (407)
+ -----------+---------+------+--
+   147      | u32     |  GET |  proměnná pro speciální TRAP (408)
+   147      | u32     |  SET |  proměnná pro speciální TRAP (408)
+ -----------+---------+------+--
+   148      | u32     |  GET |  proměnná pro speciální TRAP (409)
+   148      | u32     |  SET |  proměnná pro speciální TRAP (409)
+ -----------+---------+------+--
+   149      |         |  GET |  n/a (reserved)
+   149      |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   150      |         |  GET |  stav blokování zápisu do sdílených proměnných (tzn. podmínění přihlášením)
+   150      |         |  SET |  nastavení blokování zápisu do sdílených proměnným (0 = bez nutnosti přihlášení uživatele)
+ -----------+---------+------+--
+   151..182 | u32 (a) |  GET |  OPTO1..OPTO32 status (pozor: 0 = aktivní)
+   151..182 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   183      | u32     |  GET |  datum vydání FW v tomto SDS (nebo jen 0x00000000 u starších FW)
+   183      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   184      | u32     |  GET |  způsob spuštění FULL-C programu
+   184      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   185      | u32     |  GET |  hodnota odpočtu FULL-C WatchDogu, v msec
+   185      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   186      | u32     |  GET |  n/a (reserved)
+   186      |         |  SET |  n/a
+ -----------+---------+------+--
+   187      | u32     |  GET |  n/a (reserved)
+   187      |         |  SET |  n/a
+ -----------+---------+------+--
+   188      | u32     |  GET |  n/a (reserved)
+   188      |         |  SET |  n/a
+ -----------+---------+------+--
+   189      | i32     |  GET |  n/a (reserved)
+   189      |         |  SET |  n/a
+ -----------+---------+------+--
+   190      |         |  GET |  n/a (reserved)
+   190      |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   191      | u32     |  GET |  frekvence PWM generátoru (1Hz .. 5MHz)
+   191      |         |  SET |  N/A (použijte SDS_PWM_setDutyAsPercents)
+ -----------+---------+------+--
+   192      | u32     |  GET |  duty-cycle percent (0..100 [%])
+   192      |         |  SET |  N/A (použijte SDS_PWM_setDutyAsPercents)
+ -----------+---------+------+--
+   193      | u32     |  GET |  PWM-HW: direct "pulse" register value
+   193      |         |  SET |  N/A (TBD; možná doplníme)
+ -----------+---------+------+--
+   194..195 |         |  GET |  n/a (reserved)
+   194..195 |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   196..228 | u32 (a) |  GET |  RELAY1..RELAY32 - "kdo" ovládá daný výstup
+   196..228 | u32     |  SET |  RELAY1..RELAY32 - 0=ručne, 2=FULL-C, 4=IPwdg
+ -----------+---------+------+--
+   229..230 |         |  GET |  n/a (reserved)
+   229..230 |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   231..262 | u32 (a) |  GET |  RELAY1..RELAY32 - stav (0=vyp)
+   231..262 | u32     |  SET |  RELAY1..RELAY32 - stav (0=vyp)
+ -----------+---------+------+--
+   263..265 |         |  GET |  n/a (reserved)
+   263..265 |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   266..297 | a       |  GET |  RELAY1..RELAY32 - název (text, viz webadmin)
+   266..297 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   298..300 |         |  GET |  n/a (reserved)
+   298..300 |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   301      | u32     |  GET |  stav (log0/log1) pinu GPIO-TOPBOARD
+   301      | u32     |  SET |  stav pinu GPIO-TOPBOARD
+ -----------+---------+------+--
+   302      | u32     |  GET |  směr (vstup/výstup) pinu GPIO-TOPBOARD
+   302      | u32     |  SET |  směr pinu GPIO-TOPBOARD
+ -----------+---------+------+--
+   303..310 |         |  GET |  n/a (reserved)
+   303..310 |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   311..342 | f32 (a) |  GET |  přepočtená hodnota (float) A/D vstupu
+   311..342 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   343..374 | a       |  GET |  jméno A/D vstupu (text)
+   343..374 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   375..406 | a       |  GET |  jednotka A/D vstupu (text)
+   375..406 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   407..427 |         |  GET |  n/a (reserved)
+   407..427 |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   428      | u32     |  GET |  uživatelem vybraný typ OZ chipu (HW SDS), 0=AD, 9=LMV
+   428      |         |  SET |  n/a (read-only) (nastavení jen přes web)
+ -----------+---------+------+--
+   429      | u32     |  GET |  surová hodnota Vbatt (raw ADC hodnota) konverze je: Vbatt = (b_raw*3.3)/2048 (výsledek: Volty)
+   429      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   430      | u32     |  GET |  hodnota VrefInt v miliVoltech (typicky 3300)
+   430      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   431..438 | u32 (a) |  GET |  surová hodnota (raw) A/D vstupu (0..4095)
+   431..438 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   439..462 |         |  GET |  n/a (reserved)
+   439..462 |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   463..469 | f32 (a) |  GET |  kalibrační údaje (F0..F6) pro A/D vstup [0]
+   463..469 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   470..476 | f32 (a) |  GET |  kalibrační údaje (F0..F6) pro A/D vstup [1]
+   470..476 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   477..483 | f32 (a) |  GET |  kalibrační údaje (F0..F6) pro A/D vstup [2]
+   477..483 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   484..490 | f32 (a) |  GET |  kalibrační údaje (F0..F6) pro A/D vstup [3]
+   484..490 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   491..497 | f32 (a) |  GET |  kalibrační údaje (F0..F6) pro A/D vstup [4]
+   491..497 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   498..504 | f32 (a) |  GET |  kalibrační údaje (F0..F6) pro A/D vstup [5]
+   498..504 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   505..511 | f32 (a) |  GET |  kalibrační údaje (F0..F6) pro A/D vstup [6]
+   505..511 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   512..518 | f32 (a) |  GET |  kalibrační údaje (F0..F6) pro A/D vstup [7]
+   512..518 |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+   519..991 |         |  GET |  n/a (reserved)
+   519..991 |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   992      | u32     |  GET |  UTC timestamp (localtime) kdy bude nejbližší 23:59:59 (poslední sekunda aktuálního dne)
+   992      |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   993      | u32     |  GET |  UTC timestamp (localtime) - začátek včerejšího dne, od kdy byl brán záznam (0 = záznam není)
+   993      |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   994      | u32     |  GET |  UTC timestamp (localtime) - začátek dnešního dne (nebo zapnutí SDS), od kdy je brán nový dnešní záznam
+   994      |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   995      | u32     |  GET |  počet sekund za minulý den, jak dlouho byl aktivní T0 (tedy za celý den od [993] do [994])
+   995      |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   996      | u32     |  GET |  počet sekund za minulý den, jak dlouho byl aktivní T1 (tedy za celý den od [993] do [994])
+   996      |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   997      | u32     |  GET |  počet sekund dnes od času [994] (začátek dnešního dne) do teď; jak dlouho byl/je aktivní T0
+   997      |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   998      | u32     |  GET |  počet sekund dnes od času [994] (začátek dnešního dne) do teď; jak dlouho byl/je aktivní T1
+   998      |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+   999      | u32     |  GET |  okamžitý stav Tarifního Vstupu (je-li právě teď, v režimu T0 (hodnota = 0) nebo T1)
+   999      | u32     |  SET |  TBD
+ -----------+---------+------+--
+  1000..1031| u32 (a) |  GET |  [S0-vstup] aktuální údaj počítadla pro T0
+  1000..1031| u32     |  SET |  [S0-vstup] aktuální údaj počítadla pro T0
+ -----------+---------+------+--
+  1032..1063| u32 (a) |  GET |  [S0-vstup] aktuální údaj počítadla pro T1
+  1032..1063| u32     |  SET |  [S0-vstup] aktuální údaj počítadla pro T1
+ -----------+---------+------+--
+  1064..1095| u32 (a) |  GET |  [S0-vstup] vzdálenost (msec) mezi impulsy
+  1064..1095|         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  1096..1127| u32 (a) |  GET |  [S0-vstup] čas (msec) od posledního impulsu
+  1096..1127|         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  1128..1159| u32     |  GET |  [S0-vstup] rozdíl počítadla T0 za včerejší den (tj. od [993] do [994])
+  1128..1159|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  1160..1191| u32     |  GET |  [S0-vstup] rozdíl počítadla T1 za včerejší den (tj. od [993] do [994])
+  1160..1191|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  1192..1223| u32     |  GET |  [S0-vstup] rozdíl počítadla T0 dnes od času [994] (od začátku dnešního dne) do teď
+  1192..1223|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  1224..1255| u32     |  GET |  [S0-vstup] rozdíl počítadla T1 dnes od času [994] (od začátku dnešního dne) do teď
+  1224..1255|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  1256..1499|         |  GET |  n/a (reserved)
+  1256..1499|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  1500..1531| a       |  GET |  [S0-vstup] konfigurační struktura
+  1500..1531| a       |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  1532..1999|         |  GET |  n/a (reserved)
+  1532..1999|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  2000..2063| u32 (a) |  GET |  [1-W BUS (A)] device status
+  2000..2063|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  2100..2163| a       |  GET |  [1-W BUS (A)] konfigurační struktura
+  2100..2163|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  2200..2263| i32 (a) |  GET |  [1-W BUS (A)] přečtená hodnota (základní)
+  2200..2263|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  2300..2363| i32 (a) |  GET |  [1-W BUS (A)] přečtená hodnota (doplňková)
+  2300..2363|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  2364..2499|         |  GET |  n/a (reserved)
+  2364..2499|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  2500..2563| u32 (a) |  GET |  [1-W BUS (B)] device status
+  2500..2563|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  2600..2663| a       |  GET |  [1-W BUS (B)] konfigurační struktura
+  2600..2663|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  2700..2763| i32 (a) |  GET |  [1-W BUS (B)] přečtená hodnota (základní)
+  2700..2763|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  2800..2863| i32 (a) |  GET |  [1-W BUS (B)] přečtená hodnota (doplňková)
+  2800..2863|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  2864..2997|         |  GET |  n/a (reserved)
+  2864..2997|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  2998      | u32     |  GET |  general 1-W Master Chip status: 1 = detecting; 2 or 4 = failure; 8 = working; 16 = disabled by user
+  2998      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  2999      | u32     |  GET |  general 1-W Master Chip status: detection-retry countdown (*10msec)
+  2999      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3000      |         |  GET |  n/a (reserved)
+  3000      |         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  3001      | a       |  GET |  custom 24-byte string (readable via SNMP .8.80)
+  3001      | a       |  SET |  write
+ -----------+---------+------+--
+  3002      | a       |  GET |  custom 24-byte string (readable via SNMP .8.81)
+  3002      | a       |  SET |  write
+ -----------+---------+------+--
+  3003      | a       |  GET |  custom 16-byte string (readable via SNMP .8.82)
+  3003      | a       |  SET |  write
+ -----------+---------+------+--
+  3004      | a       |  GET |  custom 16-byte string (readable via SNMP .8.83)
+  3004      | a       |  SET |  write
+ -----------+---------+------+--
+  3005      | a       |  GET |  custom 16-byte string (readable via SNMP .8.84)
+  3005      | a       |  SET |  write
+ -----------+---------+------+--
+  3006..3799|         |  GET |  n/a (reserved)
+  3006..3799|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  3800      | u32     |  GET |  PVD Active - main power failure detected
+  3800      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3801      | u32     |  GET |  PVD Was Active - this flag is only cleared by reading this index 3801
+  3801      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3802..3849|         |  GET |  n/a (reserved)
+  3802..3849|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  3850      | u32     |  GET |  SD Card - fully mounted and useable
+  3850      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3851      | i32     |  GET |  latest file i/o error code
+  3851      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3852      | u32     |  GET |  SD Card - Block Size in bytes (typically 512)
+  3852      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3853      | u32     |  GET |  SD Card - CardType
+  3853      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3854      | u32     |  GET |  SD Card - CID - ProductSN
+  3854      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3855      | u32     |  GET |  statistic counter: SDC all init attempts (= successful + failed)
+  3855      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3856      | u32     |  GET |  statistic counter: SDC failed init attempts
+  3856      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3857      | u32     |  GET |  SD Card - Total Sector Count in KiB (size of the card)
+  3857      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3858      | u32     |  GET |  statistic counter: SDC sector reads
+  3858      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3859      | u32     |  GET |  statistic counter: SDC sector writes
+  3859      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3860      | u32     |  GET |  statistic counter: SDC sector r/w failures
+  3860      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3861      | u32     |  GET |  statistic counter: number of opened files
+  3861      |         |  SET |  n/a (read-only)
+ -----------+---------+------+--
+  3862..3999|         |  GET |  n/a (reserved)
+  3862..3999|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  4000..4099| i32     |  GET |  Shared Variables: S00 through S99 - read
+  4000..4099| i32     |  SET |  Shared Variables: S00 through S99 - write
+ -----------+---------+------+--
+  4100..4199| u32     |  GET |  Shared Variables: U00 through U99 - read
+  4100..4199| u32     |  SET |  Shared Variables: U00 through U99 - write
+ -----------+---------+------+--
+  4200..4299| f32     |  GET |  Shared Variables: F00 through F99 - read
+  4200..4299| f32     |  SET |  Shared Variables: F00 through F99 - write
+ -----------+---------+------+--
+  4300..4399| a       |  GET |  Shared Variables: T00 through T99 - read
+  4300..4399| a       |  SET |  Shared Variables: T00 through T99 - write
+ -----------+---------+------+--
+  4400..4999|         |  GET |  n/a (reserved)
+  4400..4999|         |  SET |  n/a (reserved)
+ -----------+---------+------+--
+  5000..5127| u/i/f 32|  GET |  BackUp-RAM (FC version 0x08+) - write
+  5000..5127| u/i/f 32|  SET |  BackUp-RAM (FC version 0x08+) - read
+ -----------+-+-------+------+--
+  5128..11118 |       |  GET |  n/a (reserved)
+  5128..11118 |       |  SET |  n/a (reserved)
+ -----------+-+-------+------+--
+  11199     | u/i 32  |  GET |  FW support for MQTT-c (0 == NOT present)
+  11199     |         |  SET |  n/a
+ -----------+---------+------+--
+  12200     | i32     |  GET |  work progress (and result) of mqtt_connect()
+  12200     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12201     | i32     |  GET |  "CONNACK Connect Return" - result of mqtt_connect()
+  12201     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12202     | i32     |  GET |  result of: mqtt_publish(), mqtt_subscribe(), mqtt_unsubscribe_index(), mqtt_unsubscribe_name()
+  12202     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12203     | i32     |  GET |  MQTT protocol error counter (informative)
+  12203     |         |  SET |  n/a 
+ -----------+--+------+------+--
+  12204..12208 |      |  GET |  n/a (reserved)
+  12204..12208 |      |  SET |  n/a (reserved)
+ -----------+--+------+------+--
+  12209     | i32     |  GET |  Subscribe Table - total number of available rows
+  12209     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12210     | a       |  GET |  latest received Topic Name (sent from broker)
+  12210     |         |  SET |  n/a 
+ -----------+--+------+------+--
+  12211..12241 | a    |  GET |  Subscribe Table: Topic Name for each table row
+  12211..12241 |      |  SET |  n/a
+ --------------+------+------+--
+  12242..12249 |      |  GET |  n/a (reserved)
+  12242..12249 |      |  SET |  n/a
+ -----------+--+------+------+--
+  12250     | a       |  GET |  latest received Value (sent from broker)
+  12250     |         |  SET |  n/a 
+ -----------+--+------+------+--
+  12251..12281 | a    |  GET |  Subscribe Table: actual Value for each table row
+  12251..12281 |      |  SET |  n/a
+ --------------+------+------+--
+  12282..12289 |      |  GET |  n/a (reserved)
+  12282..12289 |      |  SET |  n/a
+ -----------+--+------+------+--
+  12290     | u32     |  GET |  timestamp for the latest received data (Topic) from brokem
+  12290     |         |  SET |  n/a 
+ -----------+--+------+--+---+--+--
+  12291..12321 | u32 (a) |  GET |  Subscribe Table: timestamp for the last Value update, for each table row
+  12291..12321 |         |  SET |  n/a
+ --------------+------+--+---+--+--
+  12322..12398 |      |  GET |  n/a (reserved)
+  12322..12398 |      |  SET |  n/a (reserved)
+ -----------+--+------+------+--
+  12399     | u/i 32  |  GET |  FW support for MODBUS-TCP-c (0 == NOT present)
+  12399     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12400     | i32     |  GET |  work progress (and result) of modbus_tcp_connect()
+  12400     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12401     | i32     |  GET |  progress/result for function 0x01 - modbus_tcp_read(uid, 0x01, ...);
+  12401     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12402     | i32     |  GET |  progress/result for function 0x02 - modbus_tcp_read(uid, 0x02, ...);
+  12402     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12403     | i32     |  GET |  progress/result for function 0x03 - modbus_tcp_read(uid, 0x03, ...);
+  12403     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12404     | i32     |  GET |  progress/result for function 0x04 - modbus_tcp_read(uid, 0x04, ...);
+  12404     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12405     | i32     |  GET |  progress/result for function 0x05 - modbus_tcp_writesingle(uid, 0x05, ...);
+  12405     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12406     | i32     |  GET |  progress/result for function 0x06 - modbus_tcp_writesingle(uid, 0x06, ...);
+  12406     |         |  SET |  n/a 
+ -----------+--+------+------+--
+  12407..12414 |      |  GET |  n/a (reserved)
+  12407..12414 |      |  SET |  n/a (reserved)
+ -----------+--+------+------+--
+  12415     | i32     |  GET |  progress/result for function 0x0F - modbus_tcp_writemultiple(uid, 0x0F, ...);
+  12415     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12416     | i32     |  GET |  progress/result for function 0x10 - modbus_tcp_writemultiple(uid, 0x10, ...);
+  12416     |         |  SET |  n/a 
+ -----------+--+------+------+--
+  12417..12462 |      |  GET |  n/a (reserved)
+  12417..12462 |      |  SET |  n/a (reserved) 
+ -----------+--+------+------+--
+  12463     | u/i 32  |  GET |  latest Unit Identifier value written to MBAP header (msg TX to server)
+  12463     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12464     | u/i 32  |  GET |  latest Transaction Identifier value written to MBAP header (msg TX to server)
+  12464     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12465     | u/i 32  |  GET |  timestamp of the latest received message
+  12465     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12466     | u/i 32  |  GET |  a count of received items inside the latest received message
+  12466     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12467     | u/i 32  |  GET |  latest received Unit Identifier value (inside incoming MBAP header)
+  12467     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12468     | u/i 32  |  GET |  latest received Transaction Identifier value (inside incoming MBAP header)
+  12468     |         |  SET |  n/a 
+ -----------+---------+------+--
+  12469     | u/i 32  |  GET |  an address of the first coil/input/register item (maps to a value in 12470)
+  12469     |         |  SET |  n/a 
+ -----------+--+------+--+---+--+--
+  12470..12719 | i32 (a) |  GET |  received values (latest received message contents)
+  12470..12719 |         |  SET |  n/a 
+ --------------+---------+------+--

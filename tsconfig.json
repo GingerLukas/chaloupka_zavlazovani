@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "lib": [
+            "es5",
+            "es6",
+            "dom"
+        ],
+        "target": "ESNext",
+        "outDir": "./out/",
+        "sourceRoot": "./src/",
+        "noImplicitAny": true,
+        "noEmitOnError": true,
+        "removeComments": false,
+        "sourceMap": true,
+    },
+    "exclude": [
+        "node_modules",
+        "wwwroot"
+    ]
+}

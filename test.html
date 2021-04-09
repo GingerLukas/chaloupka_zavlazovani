@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="Website/main.css">
+</head>
+<body>
+    <!--<div class="nav">
+        <a href="">Přehled</a>
+        <a href="">Relé</a>
+    </div>!-->
+    <div class="content">
+        <h2>Nastavení pravidel pro relé:</h2>
+        <div id="relayGrid" class="grid">
+            <div class="relay drag-rule">
+                <div class="relay-name">Název:</div>
+                <input class="relay-name" type="text">
+                <div class="relay-rule">Pravidlo:</div>
+                <input class="relay-rule" type="text" readonly>
+                <button style="grid-column: span 2;">Vymazat pravidlo</button>
+            </div>
+        </div>
+        <h2>Pravidla:</h2>
+        <div id="rulesGrid" class="grid">
+            <div class="rule drag-sensor" draggable="true">
+                <div class="rule-name">Název:</div>
+                <input class="rule-name" type="text">
+                <div class="rule-sensor-type">Typ</div>
+                <select class="rule-sensor-type">
+                    <option value="rule_none">Vypnuto</option>
+                    <option value="rule_time">Čas</option>
+                    <option value="rule_temp">Teplota</option>
+                    <option value="rule_humi">Vlhkost</option>
+                    <option value="rule_cpwm">Interval</option>
+                </select>
+                <div class="rule-start">Od:</div>
+                <input class="rule-start" type="time" step="1">
+                <div class="rule-end">Do:</div>
+                <input class="rule-end" type="time" step="1">
+                
+                <div class="rule-sensor">Sensor:</div>
+                <input class="rule-sensor" type="text" readonly>
+                <div class="rule-a"><button>X</button> A</div>
+                <input class="rule-a drag-rule" type="text" readonly>
+                <div class="rule-b"><button>X</button> B</div>
+                <input class="rule-b drag-rule" type="text" readonly>
+            </div>
+        </div>
+        <h2>Sensory:</h2>
+        <div id="sensorGrid" class="grid">
+            <div class="sensor" draggable="true">
+                <div class="sensor-name-main">Název:</div>
+                <input class="sensor-name-main" type="text">
+                <div class="sensor-main">Hlavní hodnota:</div>
+                <div class="sensor-main">0</div>
+                <div class="sensor-misc">Vedlejší hodnota:</div>
+                <div class="sensor-misc">0</div>
+            </div>
+        </div>
+        
+        <button onclick="manager.save()">Save</button>
+    </div>
+    <script src="./build/hydro-bundle.js"></script>
+</body>
+</html>
