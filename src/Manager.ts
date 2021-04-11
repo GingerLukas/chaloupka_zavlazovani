@@ -153,22 +153,23 @@ export class Manager extends EventTarget {
                 this.save(SaveTarget.SENSOR);
                 this.save(SaveTarget.RULE);
                 this.save(SaveTarget.RELAY);
+                this.sendSharedWriteRequest("U98=1");
                 return;
             case SaveTarget.SENSOR:
                 for (const sensor of this.sensors) {
                     this.sendSharedWriteRequest(sensor.getUrlSetter());
                 }
-                break;
+                return;
             case SaveTarget.RULE:
                 for (const rule of this.rules) {
                     this.sendSharedWriteRequest(rule.getUrlSetter());
                 }
-                break;
+                return;
             case SaveTarget.RELAY:
                 for (const relay of this.relays) {
                     this.sendSharedWriteRequest(relay.getUrlSetter());
                 }
-                break;
+                return;
         }
     }
 

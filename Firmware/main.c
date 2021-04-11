@@ -1,6 +1,10 @@
 #include "include.h"
 
 //U99 reserved as null shared write
+#define U99
+//
+//U98 save variable
+unsigned int U98 = 0;
 //
 #define INT_MAX 0x7FFFFFFF
 //
@@ -86,7 +90,7 @@ unsigned int U04 = 21;             //rule infos start
 //U10 - time
 unsigned int U10;
 
-//U12-U17 - relay states
+//U11-U16 - relay states
 unsigned int U11;
 unsigned int U12;
 unsigned int U13;
@@ -95,8 +99,8 @@ unsigned int U15;
 unsigned int U16;
 
 //T01-T04 - bus A names
-char T01[NAME_MAX_LEN] = "small sensor 1";
-char T02[NAME_MAX_LEN] = "small sensor 2";
+char T01[NAME_MAX_LEN];
+char T02[NAME_MAX_LEN];
 char T03[NAME_MAX_LEN];
 char T04[NAME_MAX_LEN];
 char *bus_a_names[BUS_A_LEN] = {
@@ -107,7 +111,7 @@ char *bus_a_names[BUS_A_LEN] = {
 };
 
 //T11-T14 - bus B names
-char T11[NAME_MAX_LEN] = "2m temp";
+char T11[NAME_MAX_LEN];
 char T12[NAME_MAX_LEN];
 char T13[NAME_MAX_LEN];
 char T14[NAME_MAX_LEN];
@@ -119,16 +123,16 @@ char *bus_b_names[BUS_B_LEN] = {
 };
 
 //T21-T30 - rule names
-char T21[NAME_MAX_LEN] = "Rule 1";
-char T22[NAME_MAX_LEN] = "Rule 2";
-char T23[NAME_MAX_LEN] = "Rule 3";
-char T24[NAME_MAX_LEN] = "Rule 4";
-char T25[NAME_MAX_LEN] = "Rule 5";
-char T26[NAME_MAX_LEN] = "Rule 6";
-char T27[NAME_MAX_LEN] = "Rule 7";
-char T28[NAME_MAX_LEN] = "Rule 8";
-char T29[NAME_MAX_LEN] = "Rule 9";
-char T30[NAME_MAX_LEN] = "Rule 10";
+char T21[NAME_MAX_LEN];
+char T22[NAME_MAX_LEN];
+char T23[NAME_MAX_LEN];
+char T24[NAME_MAX_LEN];
+char T25[NAME_MAX_LEN];
+char T26[NAME_MAX_LEN];
+char T27[NAME_MAX_LEN];
+char T28[NAME_MAX_LEN];
+char T29[NAME_MAX_LEN];
+char T30[NAME_MAX_LEN];
 char *rule_names[RULE_NUM] = {
     &T21,
     &T22,
@@ -149,7 +153,7 @@ char T33[NAME_MAX_LEN];
 char T34[NAME_MAX_LEN];
 char T35[NAME_MAX_LEN];
 char T36[NAME_MAX_LEN];
-char *relay_name[RELAY_NUM] = {
+char *relay_names[RELAY_NUM] = {
     &T31,
     &T32,
     &T33,
@@ -403,7 +407,6 @@ unsigned int *relay_rules[] = {
     &U75,
 };
 
-//TODO: change to int, rename to S prefix, change len to AD_LEN * BUS_ITEM_LEN
 //S60 - S75 analog raw/calculated input
 int S60;
 int S61;
@@ -705,20 +708,147 @@ void evaluateAllRules()
     }
 }
 
+#define PAGE_RELAY_NAMES 0
+#define PAGE_RELAY_RULES 0
+#define PAGE_BUS_A_NAMES 1
+#define PAGE_BUS_B_NAMES 1
+#define PAGE_RULE_NAMES 2
+#define PAGE_RULE_DATA 3
+
 //TODO
-void saveToDf(int *buffer, unsigned int size, unsigned int page)
+void saveToDf()
 {
-    if (size > 264)
-    {
-        size = 264;
-    }
-    int data[264];
+    unsigned int last;
+    last = saveNamesToDf(relay_names, RELAY_NUM * NAME_MAX_LEN, PAGE_RELAY_NAMES, 0);
+    saveUnsignedDataToDf(relay_rules, RELAY_NUM, PAGE_RELAY_RULES, last);
+
+    last = saveNamesToDf(bus_a_names, BUS_A_LEN * NAME_MAX_LEN, PAGE_BUS_A_NAMES, 0);
+    printf("%u\n", last);
+    saveNamesToDf(bus_b_names, BUS_B_LEN * NAME_MAX_LEN, PAGE_BUS_B_NAMES, last);
+
+    saveNamesToDf(rule_names, RULE_NUM * NAME_MAX_LEN, PAGE_RULE_NAMES, 0);
+
+    last = saveSignedDataToDf(rule_ranges, RULE_NUM * RULE_RANGE_LEN, PAGE_RULE_DATA, 0);
+    saveUnsignedDataToDf(rule_infos, RULE_NUM * RULE_INFO_LEN, PAGE_RULE_DATA, last);
+}
+
+void loadFromDf()
+{
+    unsigned int last;
+    last = loadNamesFromDf(relay_names, RELAY_NUM * NAME_MAX_LEN, PAGE_RELAY_NAMES, 0);
+    loadUnsignedDataFromDf(relay_rules, RELAY_NUM, PAGE_RELAY_RULES, last);
+
+    last = loadNamesFromDf(bus_a_names, BUS_A_LEN * NAME_MAX_LEN, PAGE_BUS_A_NAMES, 0);
+    loadNamesFromDf(bus_b_names, BUS_B_LEN * NAME_MAX_LEN, PAGE_BUS_B_NAMES, last);
+
+    loadNamesFromDf(rule_names, RULE_NUM * NAME_MAX_LEN, PAGE_RULE_NAMES, 0);
+
+    last = loadSignedDataFromDf(rule_ranges, RULE_NUM * RULE_RANGE_LEN, PAGE_RULE_DATA, 0);
+    loadUnsignedDataFromDf(rule_infos, RULE_NUM * RULE_INFO_LEN, PAGE_RULE_DATA, last);
+}
+
+void writeIntToBuffer(char *buffer, unsigned int index, int value)
+{
+    buffer[index] = value & 0xFF;
+    buffer[index + 1] = (value >> 8) & 0xFF;
+    buffer[index + 2] = (value >> 16) & 0xFF;
+    buffer[index + 3] = (value >> 24);
+}
+
+unsigned int loadNamesFromDf(char **names, unsigned int size, unsigned int page, unsigned int offset)
+{
+    char data[264];
+    DF_read_page(page, data);
 
     for (unsigned int i = 0; i < size; i++)
     {
-        data[i] = buffer[i];
+        names[i / NAME_MAX_LEN][i % NAME_MAX_LEN] = data[offset];
+        offset++;
+    }
+
+    return offset;
+}
+
+unsigned int loadSignedDataFromDf(int **buffer, unsigned int size, unsigned int page, unsigned int offset)
+{
+    char data[264];
+    DF_read_page(page, data);
+
+    for (unsigned int i = 0; i < size; i++)
+    {
+        *buffer[i] = readIntFromBuffer(data, offset);
+        offset += 4;
+    }
+
+    return offset;
+}
+
+unsigned int loadUnsignedDataFromDf(unsigned int **buffer, unsigned int size, unsigned int page, unsigned int offset)
+{
+    char data[264];
+    DF_read_page(page, data);
+
+    for (unsigned int i = 0; i < size; i++)
+    {
+        *buffer[i] = readUIntFromBuffer(data, offset);
+        offset += 4;
+    }
+
+    return offset;
+}
+
+int readIntFromBuffer(char *buffer, unsigned int offset)
+{
+    return buffer[offset] | (buffer[offset + 1] << 8) | (buffer[offset + 2] << 16) | (buffer[offset + 3] << 24);
+}
+
+unsigned int readUIntFromBuffer(char *buffer, unsigned int offset)
+{
+    return buffer[offset] | (buffer[offset + 1] << 8) | (buffer[offset + 2] << 16) | (buffer[offset + 3] << 24);
+}
+
+unsigned int saveSignedDataToDf(int **buffer, unsigned int size, unsigned int page, unsigned int offset)
+{
+    char data[264];
+    DF_read_page(page, data);
+    unsigned int index = offset;
+    for (unsigned int i = 0; i < size; i++)
+    {
+        writeIntToBuffer(data, index, *buffer[i]);
+        index += 4;
     }
     DF_write_page(page, data);
+    return index;
+}
+
+unsigned int saveUnsignedDataToDf(unsigned int **buffer, unsigned int size, unsigned int page, unsigned int offset)
+{
+    char data[264];
+    DF_read_page(page, data);
+
+    for (unsigned int i = 0; i < size; i++)
+    {
+        writeIntToBuffer(data, offset, *buffer[i]);
+        offset += 4;
+    }
+
+    DF_write_page(page, data);
+    return offset;
+}
+
+unsigned int saveNamesToDf(char **buffer, unsigned int size, unsigned int page, unsigned int offset)
+{
+    char data[264];
+    DF_read_page(page, data);
+
+    for (unsigned int i = 0; i < size; i++)
+    {
+        data[offset] = buffer[i / NAME_MAX_LEN][i % NAME_MAX_LEN];
+        offset++;
+    }
+
+    DF_write_page(page, data);
+    return offset;
 }
 
 void main()
@@ -736,7 +866,10 @@ void main()
     printf("DST:%u\n", SDS_get_i32(65));
 
     PRINT_DATE;
-    printf("NTP server: %u.%u.%u.%u\n", NTP_IP & 0xFF, (NTP_IP >> 8) & 0xFF, (NTP_IP >> 16) & 0xFF, (NTP_IP >> 24) & 0xFF);
+    printf("NTP server: %u.%u.%u.%u\n", NTP_IP & 0xFF, (NTP_IP >> 8) & 0xFF, (NTP_IP >> 16) & 0xFF, (NTP_IP >> 24));
+
+    //saveToDf();
+    loadFromDf();
 
     for (unsigned int i = 0; i < AD_LEN; i++)
     {
@@ -752,6 +885,12 @@ void main()
 
     while (1)
     {
+        if (U98)
+        {
+            saveToDf();
+            U98 = 0;
+        }
+
         U10 = DATE_UTC_NOW;
         updateBus();
         updateRelaysByRules(); //rules
