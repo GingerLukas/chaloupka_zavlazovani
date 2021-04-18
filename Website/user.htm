@@ -1,54 +1,70 @@
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="WIN-1250">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hydroponie</title>
-    <script src="main.js"></script>
-    <link rel="stylesheet" href="main.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <title>Document</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> 
-    <script src="main.js"></script>
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
-    <div class="nav">
-        <a href="">PÅ™ehled</a>
-        <a href="">RelÃ©</a>
-    </div>
     <div class="content">
-        <h2>NastavenÃ­ pravidel pro relÃ©:</h2>
-        <div id="rulesGrid" class="rules-grid">
-            <div class="rule">
-                <div>Typ</div>
-                <select>
-                    <option value="rule-none">Vypnuto</option>
-                    <option value="rule-time">ÄŒas</option>
-                    <option value="rule-temp">Teplota</option>
-                    <option value="rule-humi">Vlhkost</option>
-                    <option value="rule-cpwm">Interval</option>
-                    <option value="rule-ad">Analog</option>
-                </select>
-                <div class="input-start">Od:</div>
-                <input class="input-start" type="time">
-                <div class="input-end">Do:</div>
-                <input class="input-end" type="time">
-                
-                <div class="input-index">Index:</div>
-                <input class="input-index" type="number" min="0" max="16">
-                <div class="input-bus input-index">SbÄ›rnice:</div>
-                <select class="input-bus input-index">
-                    <option value="bus_a">BUS A</option>
-                    <option value="bus_b">BUS B</option>
-                </select>
-                
-                <div class="input-state">Stav relÃ©:</div>
-                <div class="input-state">ON</div>
-                <div class="input-sensor">Hodnota senzoru:</div>
-                <div class="input-sensor">0</div>
+        <h2>Nastavení pravidel pro relé:</h2>
+        <div id="relayGrid" class="grid">
+            <div class="relay drag-rule">
+                <div class="relay-name">Název:</div>
+                <input class="relay-name" type="text">
+                <div class="relay-rule">Pravidlo:</div>
+                <input class="relay-rule" type="text" readonly>
+                <button style="grid-column: span 2;">Vymazat pravidlo</button>
             </div>
         </div>
-        <button onclick="save()">Save</button>
+        <h2>Pravidla:</h2>
+        <div id="rulesGrid" class="grid">
+            <div class="rule drag-sensor" draggable="true">
+                <div class="rule-name">Název:</div>
+                <input class="rule-name" type="text">
+                <div class="rule-sensor-type">Typ</div>
+                <select class="rule-sensor-type">
+                    <option value="rule_none">Vypnuto</option>
+                    <option value="rule_time">Èas</option>
+                    <option value="rule_temp">Hlavní</option>
+                    <option value="rule_humi">Vedlejší</option>
+                    <option value="rule_cpwm">Interval</option>
+                </select>
+                <div class="rule-start">Od:</div>
+                <input class="rule-start" type="time" step="1">
+                <div class="rule-end">Do:</div>
+                <input class="rule-end" type="time" step="1">
+                
+                <div class="rule-sensor">Sensor:</div>
+                <input class="rule-sensor" type="text" readonly>
+                <div class="rule-a"><button>X</button> A</div>
+                <input class="rule-a drag-rule" type="text" readonly>
+                <div class="rule-b"><button>X</button> B</div>
+                <input class="rule-b drag-rule" type="text" readonly>
+
+                <div class="rule-mail">Mail:</div>
+                <input class="rule-mail" type="checkbox" style="height: 100%; width: 100%;">
+            </div>
+        </div>
+        <h2>Sensory:</h2>
+        <div id="sensorGrid" class="grid">
+            <div class="sensor" draggable="true">
+                <div class="sensor-name-main">Název:</div>
+                <input class="sensor-name-main" type="text">
+                <div class="sensor-main">Hlavní hodnota:</div>
+                <div class="sensor-main">0</div>
+                <div class="sensor-misc">Vedlejší hodnota:</div>
+                <div class="sensor-misc">0</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 50px; margin-bottom: 50px; padding-bottom: 50px;">
+            <label for="mail">E-mail pro upozornìní: </label><input type="email" name="mail" id="mail"><br><br>
+            <button class="btn-save" onclick="manager.save()">Uložit</button>
+        </div>
     </div>
-    <script>init();</script>
+    <script src="./hydro-bundle.js"></script>
 </body>
 </html>

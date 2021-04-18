@@ -32,8 +32,8 @@
                 <select class="rule-sensor-type">
                     <option value="rule_none">Vypnuto</option>
                     <option value="rule_time">Čas</option>
-                    <option value="rule_temp">Teplota</option>
-                    <option value="rule_humi">Vlhkost</option>
+                    <option value="rule_temp">Hlavní</option>
+                    <option value="rule_humi">Vedlejší</option>
                     <option value="rule_cpwm">Interval</option>
                 </select>
                 <div class="rule-start">Od:</div>
@@ -47,6 +47,9 @@
                 <input class="rule-a drag-rule" type="text" readonly>
                 <div class="rule-b"><button>X</button> B</div>
                 <input class="rule-b drag-rule" type="text" readonly>
+
+                <div class="rule-mail">Mail:</div>
+                <input class="rule-mail" type="checkbox" style="height: 100%; width: 100%;">
             </div>
         </div>
         <h2>Sensory:</h2>
@@ -61,7 +64,10 @@
             </div>
         </div>
         
-        <button onclick="manager.save()">Save</button>
+        <div style="text-align: center; margin-top: 50px; margin-bottom: 50px; padding-bottom: 50px;">
+            <label for="mail">E-mail pro upozornění: </label><input type="email" name="mail" id="mail"><br><br>
+            <button class="btn-save" onclick="manager.save()">Uložit</button>
+        </div>
     </div>
     <script src="./build/hydro-bundle.js"></script>
 </body>

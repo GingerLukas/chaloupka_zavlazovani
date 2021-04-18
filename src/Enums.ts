@@ -23,4 +23,5 @@ export enum SaveTarget {
     SENSOR = 1,
     RULE = 2,
     RELAY = 3,
+    MAIL = 4,
 }

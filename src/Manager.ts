@@ -32,6 +32,9 @@ export class Manager extends EventTarget {
             this.analog_names[index] = variable;
             Sensor.CreateWithProperty(this.analog, index, 0, variable, manager, SensorType.ANALOG);
         }, true),
+        new SharedRange("T", 99, 99, (variable: SharedVariable, index: number) => {
+            this.mail_raw = variable;
+        }, true),
 
         new SharedRange("U", 10, 10, (variable: SharedVariable, index: number) => {
             this.timeVar = variable;
@@ -47,6 +50,9 @@ export class Manager extends EventTarget {
         new SharedRange("U", 70, 75, (variable: SharedVariable, index: number) => {
             this.relay_rule_index[index] = variable;
             Relay.CreateWithProperty(manager.relays, index, RelayIndexes.RULE, variable, manager);
+        }, true),
+        new SharedRange("U", 80, 89, (variable: SharedVariable, index: number) => {
+            Rule.CreateWithProperty(manager.rules, index, 7, variable, manager);
         }, true),
 
         new SharedRange("S", 11, 18, (variable: SharedVariable, index: number) => {
@@ -80,6 +86,8 @@ export class Manager extends EventTarget {
     timeVar: SharedVariable;
 
     sensors: Sensor[] = [];
+
+    mail_raw: SharedVariable;
 
     bus_a: Sensor[] = [];
     bus_a_raw: SharedVariable[] = [];
@@ -153,6 +161,7 @@ export class Manager extends EventTarget {
                 this.save(SaveTarget.SENSOR);
                 this.save(SaveTarget.RULE);
                 this.save(SaveTarget.RELAY);
+                this.save(SaveTarget.MAIL);
                 this.sendSharedWriteRequest("U98=1");
                 return;
             case SaveTarget.SENSOR:
@@ -169,6 +178,9 @@ export class Manager extends EventTarget {
                 for (const relay of this.relays) {
                     this.sendSharedWriteRequest(relay.getUrlSetter());
                 }
+                return;
+            case SaveTarget.MAIL:
+                this.sendSharedWriteRequest(this.mail_raw.getUrlSetter());
                 return;
         }
     }

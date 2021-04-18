@@ -708,26 +708,82 @@ void evaluateAllRules()
     }
 }
 
+unsigned int U80;
+unsigned int U81;
+unsigned int U82;
+unsigned int U83;
+unsigned int U84;
+unsigned int U85;
+unsigned int U86;
+unsigned int U87;
+unsigned int U88;
+unsigned int U89;
+unsigned int *mail_info[] = {
+    &U80,
+    &U81,
+    &U82,
+    &U83,
+    &U84,
+    &U85,
+    &U86,
+    &U87,
+    &U88,
+    &U89,
+};
+
+char T99[NAME_MAX_LEN]; //mail
+char *mail[] = {&T99};
+unsigned int last_mail_status[RULE_NUM];
+unsigned int last_mail_time[RULE_NUM];
+void sendAllMails()
+{
+    for (unsigned int i = 0; i < RULE_NUM; i++)
+    {
+        if (*mail_info[i] && rule_cache[i])
+        {
+            if (!last_mail_status[i])
+            {
+                if ((DATE_UTC_NOW - last_mail_time[i]) > 60)
+                {
+                    PRINT_DATE;
+                    printf("sending mail for rule index: %u\n", i);
+                    smtp_send(*mail, rule_names[i], rule_names[i]);
+                    last_mail_time[i] = DATE_UTC_NOW;
+                    last_mail_status[i] = 1;
+                }
+            }
+        }
+        else
+        {
+            last_mail_status[i] = 0;
+        }
+    }
+}
+
 #define PAGE_RELAY_NAMES 0
 #define PAGE_RELAY_RULES 0
+#define PAGE_MAIL 0
 #define PAGE_BUS_A_NAMES 1
 #define PAGE_BUS_B_NAMES 1
 #define PAGE_RULE_NAMES 2
 #define PAGE_RULE_DATA 3
 
-//TODO
 void saveToDf()
 {
     unsigned int last;
+    //page 0
     last = saveNamesToDf(relay_names, RELAY_NUM * NAME_MAX_LEN, PAGE_RELAY_NAMES, 0);
-    saveUnsignedDataToDf(relay_rules, RELAY_NUM, PAGE_RELAY_RULES, last);
+    last = saveUnsignedDataToDf(relay_rules, RELAY_NUM, PAGE_RELAY_RULES, last);
+    saveNamesToDf(mail, NAME_MAX_LEN, PAGE_MAIL, last);
 
+    //page 1
     last = saveNamesToDf(bus_a_names, BUS_A_LEN * NAME_MAX_LEN, PAGE_BUS_A_NAMES, 0);
-    printf("%u\n", last);
     saveNamesToDf(bus_b_names, BUS_B_LEN * NAME_MAX_LEN, PAGE_BUS_B_NAMES, last);
 
+    //page 2
     saveNamesToDf(rule_names, RULE_NUM * NAME_MAX_LEN, PAGE_RULE_NAMES, 0);
 
+    //page 3
     last = saveSignedDataToDf(rule_ranges, RULE_NUM * RULE_RANGE_LEN, PAGE_RULE_DATA, 0);
     saveUnsignedDataToDf(rule_infos, RULE_NUM * RULE_INFO_LEN, PAGE_RULE_DATA, last);
 }
@@ -735,14 +791,19 @@ void saveToDf()
 void loadFromDf()
 {
     unsigned int last;
+    //page 0
     last = loadNamesFromDf(relay_names, RELAY_NUM * NAME_MAX_LEN, PAGE_RELAY_NAMES, 0);
-    loadUnsignedDataFromDf(relay_rules, RELAY_NUM, PAGE_RELAY_RULES, last);
+    last = loadUnsignedDataFromDf(relay_rules, RELAY_NUM, PAGE_RELAY_RULES, last);
+    loadNamesFromDf(mail, NAME_MAX_LEN, PAGE_MAIL, last);
 
+    //page 1
     last = loadNamesFromDf(bus_a_names, BUS_A_LEN * NAME_MAX_LEN, PAGE_BUS_A_NAMES, 0);
     loadNamesFromDf(bus_b_names, BUS_B_LEN * NAME_MAX_LEN, PAGE_BUS_B_NAMES, last);
 
+    //page 2
     loadNamesFromDf(rule_names, RULE_NUM * NAME_MAX_LEN, PAGE_RULE_NAMES, 0);
 
+    //page 3
     last = loadSignedDataFromDf(rule_ranges, RULE_NUM * RULE_RANGE_LEN, PAGE_RULE_DATA, 0);
     loadUnsignedDataFromDf(rule_infos, RULE_NUM * RULE_INFO_LEN, PAGE_RULE_DATA, last);
 }
@@ -894,6 +955,7 @@ void main()
         U10 = DATE_UTC_NOW;
         updateBus();
         updateRelaysByRules(); //rules
+        sendAllMails();
     }
     PRINT_MESSAGE("ERROR!");
 }

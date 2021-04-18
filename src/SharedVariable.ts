@@ -19,6 +19,9 @@ export class SharedVariable implements ISaveable {
 				case BindType.Select:
 					(<HTMLSelectElement>this._target).options.selectedIndex = <number>val;
 					break;
+				case BindType.Checkbox:
+					(<HTMLInputElement>this._target).checked = val ? true : false;
+					break;
 				default:
 					break;
 			}
@@ -60,6 +63,19 @@ export class SharedVariable implements ISaveable {
 		});
 		this.value = this.value;
 	}
+	bindCheckbox(target: HTMLInputElement, action: () => any = null) {
+		this._type = BindType.Checkbox;
+		this._target = target;
+		addRelativeCallback(this._target, "change", this, (x) => {
+			x._value = (<HTMLInputElement>x._target).checked ? 1 : 0;
+			if (action) {
+				action();
+			}
+			//TODO: remove debug
+			console.log(x);
+		});
+		this.value = this.value;
+	}
 	bindSelect(target: HTMLSelectElement, action: () => any = null) {
 		this._type = BindType.Select;
 		this._target = target;
@@ -77,5 +93,6 @@ export class SharedVariable implements ISaveable {
 
 enum BindType {
 	Text,
-	Select
+	Select,
+	Checkbox
 }

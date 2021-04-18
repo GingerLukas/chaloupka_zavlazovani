@@ -107,6 +107,7 @@ export class Rule extends Realtime implements ISaveable, IDragAndDrop {
         private targetVar: SharedVariable,
         private subRuleAVar: SharedVariable,
         private subRuleBVar: SharedVariable,
+        private mailVar: SharedVariable,
         private manager: Manager
     ) {
         super(manager);
@@ -133,9 +134,9 @@ export class Rule extends Realtime implements ISaveable, IDragAndDrop {
     static CreateWithProperty(array: Rule[], arrayIndex: number, propertyIndex: number, variable: SharedVariable, manager: Manager): Rule {
         let rule = array[arrayIndex];
         if (rule === undefined) {
-            rule = array[arrayIndex] = new Rule(undefined, undefined, undefined, undefined, undefined, undefined, undefined, manager);
+            rule = array[arrayIndex] = new Rule(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, manager);
         }
-        switch (propertyIndex % 7) {
+        switch (propertyIndex % 8) {
             case 0:
                 rule.startVar = variable;
                 break;
@@ -156,6 +157,9 @@ export class Rule extends Realtime implements ISaveable, IDragAndDrop {
                 break;
             case 6:
                 rule.nameVar = variable;
+                break;
+            case 7:
+                rule.mailVar = variable;
                 break;
             default:
                 break;
@@ -180,6 +184,7 @@ export class Rule extends Realtime implements ISaveable, IDragAndDrop {
         this.sensorTypeElement = <HTMLSelectElement>this.element.getElementsByClassName("rule-sensor-type")[1];
         this.subRuleAElement = <HTMLInputElement>this.element.getElementsByClassName("rule-a")[1];
         this.subRuleBElement = <HTMLInputElement>this.element.getElementsByClassName("rule-b")[1];
+        this.mailCheckbox = <HTMLInputElement>this.element.getElementsByClassName("rule-mail")[1];
 
         this.subRuleAClearButton = this.element.getElementsByClassName("rule-a")[0].getElementsByTagName("button")[0];
         this.subRuleBClearButton = this.element.getElementsByClassName("rule-b")[0].getElementsByTagName("button")[0];
@@ -188,6 +193,7 @@ export class Rule extends Realtime implements ISaveable, IDragAndDrop {
         this.subRuleBClearButton.addEventListener("click", () => this.subRuleB = undefined);
 
         this.typeVar.bindSelect(this.sensorTypeElement, () => { this.updateStyle() });
+        this.mailVar.bindCheckbox(this.mailCheckbox);
         this.nameVar.bindText(this.nameElement);
 
         this.target = this.target;
@@ -197,8 +203,6 @@ export class Rule extends Realtime implements ISaveable, IDragAndDrop {
         this.updateStyle();
 
         enableDrop(this.element);
-
-        console.log(this);
     }
     nameElement: HTMLInputElement;
     startElement: HTMLInputElement;
@@ -209,6 +213,7 @@ export class Rule extends Realtime implements ISaveable, IDragAndDrop {
     subRuleBElement: HTMLInputElement;
     subRuleAClearButton: HTMLButtonElement;
     subRuleBClearButton: HTMLButtonElement;
+    mailCheckbox: HTMLInputElement;
     updateHandler() { }
 
     _prevType: RuleType = 0;
@@ -251,7 +256,9 @@ export class Rule extends Realtime implements ISaveable, IDragAndDrop {
             "&" +
             this.subRuleAVar.getUrlSetter() +
             "&" +
-            this.subRuleBVar.getUrlSetter()
+            this.subRuleBVar.getUrlSetter() +
+            "&" +
+            this.mailVar.getUrlSetter()
         );
     }
 }

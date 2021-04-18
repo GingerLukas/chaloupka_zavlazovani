@@ -40,6 +40,8 @@ export class Attacher {
             this.relayContainer.appendChild(node);
             relay.element = this.relayContainer.getElementsByClassName(this.relayClassName)[this.relayContainer.childElementCount - 1];
         }
+        var mailElement = <HTMLInputElement>document.getElementById("mail");
+        manager.mail_raw.bindText(mailElement);
         console.log(this);
     }
 }

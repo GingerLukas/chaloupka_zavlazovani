@@ -67,6 +67,9 @@ body {
     transition: 0.1s;
 }
 
+.rule_none .rule-mail,
+.rule_none .rule-a,
+.rule_none .rule-b,
 .rule_none .rule-start,
 .rule_none .rule-end,
 .rule_none .rule-sensor,
@@ -120,4 +123,11 @@ body {
     grid-column: span 1;
     overflow: hidden;
     width: auto;
+}
+
+.btn-save {
+    font-weight: bold;
+    font-size: large;
+    width: 20%;
+    height: 5%;
 }
