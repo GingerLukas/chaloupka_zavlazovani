@@ -150,7 +150,7 @@ export class Manager extends EventTarget {
     sendSharedWriteRequest(data: string) {
         console.log(data);
         let req = new XMLHttpRequest();
-        req.open("GET", "http://192.168.1.133/sv?" + data);
+        req.open("GET", "/sv?" + data);
         req.send();
     }
 
@@ -202,7 +202,7 @@ export class Manager extends EventTarget {
             }
         }
 
-        req.open("GET", "http://192.168.1.133/shared.txt");
+        req.open("GET", "/shared.txt");
         req.addEventListener("load", handler);
         req.send();
     }

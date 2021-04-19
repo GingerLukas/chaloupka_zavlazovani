@@ -731,7 +731,9 @@ unsigned int *mail_info[] = {
     &U89,
 };
 
-char T99[NAME_MAX_LEN]; //mail
+#define MAIL_MAX_LEN 48
+
+char T99[MAIL_MAX_LEN]; //mail
 char *mail[] = {&T99};
 unsigned int last_mail_status[RULE_NUM];
 unsigned int last_mail_time[RULE_NUM];
@@ -774,7 +776,7 @@ void saveToDf()
     //page 0
     last = saveNamesToDf(relay_names, RELAY_NUM * NAME_MAX_LEN, PAGE_RELAY_NAMES, 0);
     last = saveUnsignedDataToDf(relay_rules, RELAY_NUM, PAGE_RELAY_RULES, last);
-    saveNamesToDf(mail, NAME_MAX_LEN, PAGE_MAIL, last);
+    saveNamesToDf(mail, MAIL_MAX_LEN, PAGE_MAIL, last);
 
     //page 1
     last = saveNamesToDf(bus_a_names, BUS_A_LEN * NAME_MAX_LEN, PAGE_BUS_A_NAMES, 0);
@@ -794,7 +796,7 @@ void loadFromDf()
     //page 0
     last = loadNamesFromDf(relay_names, RELAY_NUM * NAME_MAX_LEN, PAGE_RELAY_NAMES, 0);
     last = loadUnsignedDataFromDf(relay_rules, RELAY_NUM, PAGE_RELAY_RULES, last);
-    loadNamesFromDf(mail, NAME_MAX_LEN, PAGE_MAIL, last);
+    loadNamesFromDf(mail, MAIL_MAX_LEN, PAGE_MAIL, last);
 
     //page 1
     last = loadNamesFromDf(bus_a_names, BUS_A_LEN * NAME_MAX_LEN, PAGE_BUS_A_NAMES, 0);
